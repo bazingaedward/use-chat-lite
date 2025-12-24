@@ -1,16 +1,16 @@
 {
   "name": "use-chat-lite",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A lightweight chat hook library inspired by Vercel AI SDK, featuring controlled chat mode and custom stream support.",
-  "main": "./dist/index.js",
+  "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/index.d.mts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup src/index.ts --format esm --dts",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
     "test": "vitest",
     "lint": "tsc"
   },
@@ -26,7 +26,7 @@
   "author": "bazingaedward",
   "license": "MIT",
   "peerDependencies": {
-    "react": ">=16.8.0"
+    "react": ">=18.0.0"
   },
   "dependencies": {
     "@nanostores/react": "^0.7.0",

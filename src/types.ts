@@ -61,7 +61,6 @@ export type MessagePart =
 export interface Message {
 	id: string
 	role: "system" | "user" | "assistant" | "data"
-	content: string
 	parts?: MessagePart[]
 	createdAt?: Date
 	toolInvocations?: ToolInvocation[]

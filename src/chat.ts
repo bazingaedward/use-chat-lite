@@ -58,7 +58,6 @@ export function useChat<T extends Message = Message>(
 			const userMessage: Message = {
 				id: message.id || generateId(),
 				role: "user",
-				parts: [{ type: "text", text: message.content }],
 				...restMessage,
 			}
 			const currentMessages = $chatMessages.get()

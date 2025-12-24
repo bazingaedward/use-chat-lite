@@ -1,4 +1,4 @@
-import type { Message } from "./types"
+import type { Message, MessagePart } from "./types"
 import {
 	isDataUIMessageChunk,
 	isToolOrDynamicToolUIPart,
@@ -7,7 +7,7 @@ import {
 } from "./utils/process-ui-helpers"
 
 export type StreamingUIMessageState = {
-	message: Message
+	message: Message & { parts: MessagePart[]; metadata?: any }
 	partialToolCalls: Record<
 		string,
 		{
@@ -41,13 +41,14 @@ export function createStreamingUIMessageState({
 			lastMessage?.role === "assistant"
 				? ({
 						...lastMessage,
-						parts: [...lastMessage.parts.map((p) => ({ ...p }) as any)],
-				  } as Message)
+						parts: [...(lastMessage.parts || []).map((p) => ({ ...p }) as any)],
+				  } as Message & { parts: MessagePart[] })
 				: ({
 						id: messageId,
 						role: "assistant",
+						content: "",
 						parts: [],
-				  } as Message),
+				  } as Message & { parts: MessagePart[] }),
 		partialToolCalls: {},
 		activeTextParts: {},
 		activeReasoningParts: {},
@@ -251,13 +252,18 @@ export function processUIMessageStream({
 
 						async function updateMessageMetadata(metadata: unknown) {
 							if (metadata != null) {
-								const mergedMetadata =
+								const rawMergedMetadata =
 									state.message.metadata != null
 										? {
 												...(state.message.metadata as any),
 												...(metadata as any),
 										  }
 										: metadata
+
+								// eslint-disable-next-line @typescript-eslint/no-unused-vars
+								const { customComponents, name, ...mergedMetadata } =
+									(rawMergedMetadata as any) || {}
+
 								state.message.metadata = mergedMetadata as any
 							}
 						}
