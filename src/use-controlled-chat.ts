@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useRef } from "react"
 import {
-	createStreamingUIMessageState,
 	processUIMessageStream,
+	type StreamingUIMessageState,
 } from "./process-ui-message-stream"
 import { streamChat } from "./stream"
 import type {
 	ChatRequestOptions,
 	CreateMessage,
 	Message,
+	MessagePart,
 	UseControlledChatHelpers,
 	UseControlledChatOptions,
 } from "./types"
@@ -105,10 +106,16 @@ export const useControlledChat = <T extends Message = Message>(
 				setStatus(ChatStatus.Streaming)
 
 				const assistantMessageId = generateId()
-				const streamingState = createStreamingUIMessageState({
-					lastMessage: currentMessages.at(-1) as Message | undefined,
-					messageId: assistantMessageId,
-				})
+				const streamingState: StreamingUIMessageState = {
+					message: {
+						id: assistantMessageId,
+						role: "assistant",
+						parts: [],
+					} as Message & { parts: MessagePart[] },
+					partialToolCalls: {},
+					activeTextParts: {},
+					activeReasoningParts: {},
+				}
 
 				const runUpdateMessageJob = async (
 					job: (options: {

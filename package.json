@@ -1,6 +1,6 @@
 {
   "name": "use-chat-lite",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A lightweight chat hook library inspired by Vercel AI SDK, featuring controlled chat mode and custom stream support.",
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
